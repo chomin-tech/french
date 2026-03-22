@@ -132,10 +132,16 @@
                 <div class="text-8xl mb-6">🎈</div>
                 <h2 class="text-5xl font-bold text-orange-600 mb-4 tracking-tight">Félicitations !</h2>
                 <p class="text-2xl text-slate-600 mb-8 font-bold">형용사의 성별 구분을<br>완벽하게 마스터했습니다!</p>
-                <!-- 모달 안의 버튼은 게임 재시작이므로 새로고침 유지 -->
-                <button onclick="location.reload()" class="w-full bg-orange-500 text-white py-4 rounded-2xl text-2xl font-bold hover:bg-orange-600 transition shadow-lg">
-                    한 번 더 해보기
-                </button>
+                <div class="flex flex-col gap-3">
+                    <!-- 게임 재시작 버튼 -->
+                    <button onclick="location.reload()" class="w-full bg-orange-500 text-white py-4 rounded-2xl text-2xl font-bold hover:bg-orange-600 transition shadow-lg">
+                        한 번 더 해보기
+                    </button>
+                    <!-- 홈으로 돌아가기 버튼 추가 -->
+                    <button onclick="location.href='./index.html'" class="w-full bg-slate-100 text-slate-600 py-4 rounded-2xl text-2xl font-bold hover:bg-slate-200 transition shadow-md border-2 border-slate-200">
+                        홈으로 돌아가기
+                    </button>
+                </div>
             </div>
         </div>
     </div>
