@@ -16,23 +16,19 @@
         body {
             background-color: #fdfcf0; /* 부드러운 크림색 배경 */
             color: #475569;
-        }
-
-        /* 강조가 필요한 부분에만 제한적으로 사용 */
-        .font-pen {
-            font-family: 'Nanum+Pen+Script', cursive;
+            overflow-x: hidden;
         }
 
         .drag-item {
             cursor: grab;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             touch-action: none;
             user-select: none;
+            z-index: 10;
         }
 
         .drag-item:active {
             cursor: grabbing;
-            transform: scale(1.1) rotate(3deg);
         }
 
         .drop-basket {
@@ -75,7 +71,6 @@
     <!-- Top Navigation Container -->
     <div class="max-w-6xl mx-auto px-6 pt-6">
         <div class="flex justify-start">
-            <!-- 홈 버튼 클릭 시 ../index.html로 이동 -->
             <button onclick="location.href='../index.html'" class="home-btn bg-white border-2 border-orange-200 p-3 rounded-2xl flex items-center justify-center shadow-sm group" title="처음으로">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500 group-hover:text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -87,8 +82,8 @@
     <div class="max-w-6xl mx-auto p-6">
         <!-- Header -->
         <header class="text-center mb-10 mt-2">
-            <h1 class="text-5xl font-bold text-orange-500 mb-4 drop-shadow-sm">형용사 구분하기</h1>
-            <p class="text-2xl text-slate-600">남성 형용사와 여성 형용사를 구별해봅시다!</p>
+            <h1 class="text-5xl font-bold text-orange-500 mb-4 drop-shadow-sm">프랑스어 형용사 구분하기</h1>
+            <p class="text-2xl text-slate-600">남성, 동일, 여성 형용사를 알맞은 바구니에 담아주세요!</p>
             
             <div class="mt-6 inline-flex items-center bg-white px-6 py-2 rounded-full border-2 border-orange-200 shadow-sm">
                 <span class="text-xl mr-3 font-bold">성공:</span>
@@ -98,46 +93,44 @@
             </div>
         </header>
 
-        <!-- Source Area -->
+        <!-- Word Bank Area -->
         <section class="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border-4 border-white shadow-xl mb-10">
             <h2 class="text-2xl font-bold mb-6 text-indigo-500 flex items-center">
                 <span class="mr-2">🏷️</span> 형용사 목록
             </h2>
-            <div id="word-bank" class="flex flex-wrap gap-4 justify-center">
-                <!-- Cards will be injected by JS -->
+            <div id="word-bank" class="flex flex-wrap gap-4 justify-center relative min-h-[100px]">
+                <!-- Cards injected by JS -->
             </div>
         </section>
 
-        <!-- Drop Area -->
+        <!-- Baskets Area -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="drop-basket bg-blue-50/50 rounded-[2.5rem] p-6 flex flex-col items-center shadow-inner" data-gender="male">
                 <div class="text-2xl font-bold text-blue-600 mb-4 bg-blue-100 px-6 py-2 rounded-full shadow-sm text-center">👦 남성 (Masculin)</div>
-                <div class="flex flex-wrap gap-3 justify-center w-full min-h-[120px]" id="basket-male"></div>
+                <div class="flex flex-wrap gap-3 justify-center w-full min-h-[120px] pointer-events-none" id="basket-male"></div>
             </div>
 
             <div class="drop-basket bg-yellow-50/50 rounded-[2.5rem] p-6 flex flex-col items-center shadow-inner" data-gender="same">
                 <div class="text-2xl font-bold text-yellow-600 mb-4 bg-yellow-100 px-6 py-2 rounded-full shadow-sm text-center">🤝 동일 (M=F)</div>
-                <div class="flex flex-wrap gap-3 justify-center w-full min-h-[120px]" id="basket-same"></div>
+                <div class="flex flex-wrap gap-3 justify-center w-full min-h-[120px] pointer-events-none" id="basket-same"></div>
             </div>
 
             <div class="drop-basket bg-pink-50/50 rounded-[2.5rem] p-6 flex flex-col items-center shadow-inner" data-gender="female">
                 <div class="text-2xl font-bold text-pink-600 mb-4 bg-pink-100 px-6 py-2 rounded-full shadow-sm text-center">👧 여성 (Féminin)</div>
-                <div class="flex flex-wrap gap-3 justify-center w-full min-h-[120px]" id="basket-female"></div>
+                <div class="flex flex-wrap gap-3 justify-center w-full min-h-[120px] pointer-events-none" id="basket-female"></div>
             </div>
         </section>
 
         <!-- Success Modal -->
-        <div id="result-modal" class="fixed inset-0 bg-orange-100/95 hidden flex items-center justify-center p-4 z-50">
+        <div id="result-modal" class="fixed inset-0 bg-orange-100/95 hidden flex items-center justify-center p-4 z-[100]">
             <div class="bg-white p-10 rounded-[3rem] max-w-md w-full text-center shadow-2xl border-8 border-white">
                 <div class="text-8xl mb-6">🎈</div>
                 <h2 class="text-5xl font-bold text-orange-600 mb-4 tracking-tight">Félicitations !</h2>
                 <p class="text-2xl text-slate-600 mb-8 font-bold">형용사의 성별 구분을<br>완벽하게 마스터했습니다!</p>
                 <div class="flex flex-col gap-3">
-                    <!-- 게임 재시작 버튼 -->
                     <button onclick="location.reload()" class="w-full bg-orange-500 text-white py-4 rounded-2xl text-2xl font-bold hover:bg-orange-600 transition shadow-lg">
                         한 번 더 해보기
                     </button>
-                    <!-- 홈으로 돌아가기 버튼 경로 수정: ../index.html -->
                     <button onclick="location.href='../index.html'" class="w-full bg-slate-100 text-slate-600 py-4 rounded-2xl text-2xl font-bold hover:bg-slate-200 transition shadow-md border-2 border-slate-200">
                         홈으로 돌아가기
                     </button>
@@ -147,6 +140,39 @@
     </div>
 
     <script>
+        // --- Sound Generator (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                // '딩동댕' 느낌의 높은 알림음
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                oscillator.frequency.exponentialRampToValueAtTime(880.00, audioCtx.currentTime + 0.1); // A5
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } else {
+                // '땡' 느낌의 낮은 경고음
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
         const wordData = [
             { word: "grand", gender: "male" }, { word: "grande", gender: "female" },
             { word: "petit", gender: "male" }, { word: "petite", gender: "female" },
@@ -179,12 +205,14 @@
                 card.id = `card-${index}`;
                 card.dataset.gender = item.gender;
                 
+                // Desktop Drag & Drop
                 card.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/plain', card.id);
                     card.style.opacity = '0.4';
                 });
                 card.addEventListener('dragend', () => card.style.opacity = '1');
 
+                // Tablet/Mobile Touch
                 card.addEventListener('touchstart', handleTouchStart, {passive: false});
                 card.addEventListener('touchmove', handleTouchMove, {passive: false});
                 card.addEventListener('touchend', handleTouchEnd);
@@ -215,11 +243,13 @@
             const basketGender = basket.dataset.gender;
 
             if (correctGender === basketGender) {
+                playSound('correct');
                 card.remove();
                 const resultTag = document.createElement('div');
-                resultTag.className = "correct-pop bg-white px-4 py-2 rounded-xl border-2 border-green-200 text-xl font-bold text-green-600 shadow-sm";
+                resultTag.className = "correct-pop bg-white px-4 py-2 rounded-xl border-2 border-green-200 text-xl font-bold text-green-600 shadow-sm pointer-events-none";
                 resultTag.textContent = card.textContent;
                 
+                // 해당 바구니의 목록 컨테이너에 추가
                 basket.querySelector('div:last-child').appendChild(resultTag);
                 
                 score++;
@@ -228,45 +258,75 @@
                     setTimeout(() => document.getElementById('result-modal').classList.remove('hidden'), 500);
                 }
             } else {
+                playSound('wrong');
                 basket.classList.add('bg-red-50', 'border-red-300');
                 setTimeout(() => basket.classList.remove('bg-red-50', 'border-red-300'), 400);
             }
         }
 
+        // --- Touch Logic Improvement ---
         let touchTarget = null;
+        let offset = { x: 0, y: 0 };
+
         function handleTouchStart(e) {
-            touchTarget = e.target;
-            if (!touchTarget.classList.contains('drag-item')) {
-                touchTarget = touchTarget.closest('.drag-item');
-            }
-            if (!touchTarget) return;
+            touchTarget = e.currentTarget;
+            
+            // 터치 지점과 카드의 왼쪽 상단 모서리 간의 거리를 계산하여 카드가 손가락 아래에 오도록 함
+            const rect = touchTarget.getBoundingClientRect();
+            offset.x = e.touches[0].clientX - rect.left;
+            offset.y = e.touches[0].clientY - rect.top;
             
             touchTarget.style.position = 'fixed';
+            touchTarget.style.width = rect.width + 'px'; // 크기 고정
+            touchTarget.style.height = rect.height + 'px';
             touchTarget.style.zIndex = '1000';
-            moveAt(e.touches[0].pageX, e.touches[0].pageY);
+            touchTarget.style.pointerEvents = 'none'; // 바구니 인식을 위해 일시적으로 이벤트 차단
+            
+            moveAt(e.touches[0].clientX, e.touches[0].clientY);
         }
+
         function handleTouchMove(e) {
             if (!touchTarget) return;
             e.preventDefault();
-            moveAt(e.touches[0].pageX, e.touches[0].pageY);
+            moveAt(e.touches[0].clientX, e.touches[0].clientY);
+            
+            // 드래그 중인 위치의 바구니 시각적 효과
+            const dropTarget = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+            const basket = dropTarget?.closest('.drop-basket');
+            
+            document.querySelectorAll('.drop-basket').forEach(b => b.classList.remove('drag-over'));
+            if (basket) basket.classList.add('drag-over');
         }
-        function moveAt(pageX, pageY) {
+
+        function moveAt(clientX, clientY) {
             if (!touchTarget) return;
-            touchTarget.style.left = pageX - touchTarget.offsetWidth / 2 + 'px';
-            touchTarget.style.top = pageY - touchTarget.offsetHeight / 2 + 'px';
+            // 계산된 오프셋을 사용하여 카드를 정확히 손가락 아래로 이동
+            touchTarget.style.left = clientX - offset.x + 'px';
+            touchTarget.style.top = clientY - offset.y + 'px';
         }
+
         function handleTouchEnd(e) {
             if (!touchTarget) return;
             const touch = e.changedTouches[0];
-            touchTarget.style.display = 'none';
+            
+            // 드롭 위치 확인
             const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-            touchTarget.style.display = 'block';
-
             const basket = dropTarget?.closest('.drop-basket');
+
+            // 스타일 원상복구
+            touchTarget.style.position = '';
+            touchTarget.style.left = '';
+            touchTarget.style.top = '';
+            touchTarget.style.width = '';
+            touchTarget.style.height = '';
+            touchTarget.style.zIndex = '';
+            touchTarget.style.pointerEvents = 'auto';
+            document.querySelectorAll('.drop-basket').forEach(b => b.classList.remove('drag-over'));
+
             if (basket) {
                 checkAnswer(touchTarget.id, basket);
             }
-            touchTarget.style.position = 'static';
+            
             touchTarget = null;
         }
 
